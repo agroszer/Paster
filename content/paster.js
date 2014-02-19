@@ -107,7 +107,7 @@ var utils = {
 
 //
 // paste.pocoo.org
-// !! DISABLED, pocoo has been shut down. 
+// !! DISABLED, pocoo has been shut down.
 //
 var pocoo = {
 
@@ -408,67 +408,96 @@ var stackato = {
 var pasterExtension = {
 
     onLoad: function() {
-        window.controllers.appendController(this);
+        try {
+            window.controllers.appendController(this);
+        } catch (e) {
+            ko.logging.getLogger("paster.js").exception(e);
+            alert("paster.js exception, have a look at the log");
+        }
     },
 
     onUnload: function() {
-
-        window.controllers.removeController(this);
+        try {
+            window.controllers.removeController(this);
+        } catch (e) {
+            ko.logging.getLogger("paster.js").exception(e);
+            alert("paster.js exception, have a look at the log");
+        }
     },
 
     pasteSelection: function() {
 
         var text = utils.getSelection();
 
-        if (text == "") {
+        try {
+            if (text == "") {
 
-            ko.dialogs.alert('you\'ll want to select some text first!');
-            return;
+                ko.dialogs.alert('you\'ll want to select some text first!');
+                return;
 
-        } else {
+            } else {
 
-            prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch("paster.");
-            prefs.QueryInterface(Components.interfaces.nsIPrefBranch2);
+                prefs = Components.classes["@mozilla.org/preferences-service;1"].getService(Components.interfaces.nsIPrefService).getBranch("paster.");
+                prefs.QueryInterface(Components.interfaces.nsIPrefBranch2);
 
-            symbol = prefs.getCharPref("symbol").toUpperCase();
+                symbol = prefs.getCharPref("symbol").toUpperCase();
 
-            if (symbol == "PASTEBIN") pastebin.post();
-            else if (symbol == "UBUNTU") ubuntu.post();
-            else if (symbol == "GIST") gist.post();
-            else if (symbol == "POCOO") pocoo.post();
-            else if (symbol == "SPRUNGE") sprunge.post();
-            else if (symbol == "STACKATO") stackato.post();
+                if (symbol == "PASTEBIN") pastebin.post();
+                else if (symbol == "UBUNTU") ubuntu.post();
+                else if (symbol == "GIST") gist.post();
+                else if (symbol == "POCOO") pocoo.post();
+                else if (symbol == "SPRUNGE") sprunge.post();
+                else if (symbol == "STACKATO") stackato.post();
+            }
+        } catch (e) {
+            ko.logging.getLogger("paster.js").exception(e);
+            alert("paster.js exception, have a look at the log");
         }
     },
 
     supportsCommand: function(cmd) {
-        switch (cmd) {
-            case "cmd_pasterSelection":
-                return true;
+        try {
+            switch (cmd) {
+                case "cmd_pasterSelection":
+                    return true;
+            }
+        } catch (e) {
+            ko.logging.getLogger("paster.js").exception(e);
+            alert("paster.js exception, have a look at the log");
         }
         return false;
     },
 
     isCommandEnabled: function(cmd) {
         // at startup with no file open manager is null
-        var view = ko.views.manager && ko.views.manager.currentView;
+        try {
+            var view = ko.views.manager && ko.views.manager.currentView;
 
-        switch (cmd) {
-            case "cmd_pasterSelection":
-                if (view && view.getAttribute('type') == 'editor') {
-                var scimoz = view.scintilla.scimoz;
+            switch (cmd) {
+                case "cmd_pasterSelection":
+                    if (view && view.getAttribute('type') == 'editor') {
+                    var scimoz = view.scintilla.scimoz;
 
-                return scimoz.selectionStart != scimoz.selectionEnd;
+                    return scimoz.selectionStart != scimoz.selectionEnd;
+                }
             }
+        } catch (e) {
+            ko.logging.getLogger("paster.js").exception(e);
+            alert("paster.js exception, have a look at the log");
         }
         return false;
     },
 
     doCommand: function(cmd) {
-        switch (cmd) {
-            case "cmd_pasterSelection":
-                this.pasteSelection();
-            break;
+        try {
+            switch (cmd) {
+                case "cmd_pasterSelection":
+                    this.pasteSelection();
+                break;
+            }
+        } catch (e) {
+            ko.logging.getLogger("paster.js").exception(e);
+            alert("paster.js exception, have a look at the log");
         }
     },
 
