@@ -163,6 +163,8 @@ var pocoo = {
 //
 // http://develop.github.com/p/gist.html
 //
+// https://github.com/michael/github
+//
 var gist = {
 
     post: function() {
