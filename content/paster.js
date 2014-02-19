@@ -106,57 +106,6 @@ var utils = {
 
 
 //
-// paste.pocoo.org
-// !! DISABLED, pocoo has been shut down.
-//
-var pocoo = {
-
-    post: function() {
-
-        var selection = utils.getSelection();
-
-        var curLang = ko.views.manager.currentView.koDoc.language;
-        var fileName = ko.views.manager.currentView.koDoc.file.baseName;
-        var fileExt = fileName.split('.').pop();
-
-        var httpReq = new XMLHttpRequest();
-        httpReq.open("post", "http://paste.pocoo.org/json/?method=pastes.newPaste", false);
-        httpReq.setRequestHeader("content-type", "text/json");
-
-        var pubpri = utils.publicPrivate();
-
-        var jsonObj = {};
-
-        jsonObj.language = curLang;
-        jsonObj.code = selection;
-        jsonObj.filename = fileName;
-
-        if (pubpri === true) {
-            jsonObj.private = "True";
-        }
-
-        sendString = JSON.stringify(jsonObj);
-
-        //sendString = utils.escapeToScript(sendString);
-
-        httpReq.setRequestHeader("Content-length", sendString.length);
-        httpReq.setRequestHeader("Connection", "close");
-        httpReq.send(sendString);
-
-        var res = httpReq.responseText;
-        var json = JSON.parse(res);
-
-        paste_id = json.data;
-        pasteUrl = "http://paste.pocoo.org/show/" + paste_id;
-        utils.copyText(pasteUrl);
-        utils.notify('Pocoo is permanently offline', pasteUrl);
-        utils.openInBrowser(pasteUrl);
-    }
-};
-
-
-
-//
 //--// gist.github.com
 //
 //  the Gist API is not well documented although it seems stable enough, for now.
